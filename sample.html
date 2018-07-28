@@ -1,0 +1,82 @@
+Dim Maxl As Long
+
+Dim Touseki As Object
+
+Private Sub UserForm_Initialize()
+
+    Set Touseki = Worksheets("透析患者リスト")
+
+    Maxl = Touseki.UsedRange.Rows.Count
+
+End Sub
+
+Private Sub CommandButton1_Click()
+
+    Dim Namae As String
+
+    Dim MeNamae As Object
+
+    
+
+    Namae = TextBox1.Text
+
+    Set MeNamae = KensakuForm
+
+    Call 検索(Namae, MeNamae)
+
+ 
+
+End Sub
+
+Private Sub CommandButton2_Click()
+
+    End
+
+End Sub
+
+Public Function Kensaku(ByVal Namae As String) As Integer
+
+    Dim kensakuSu As Integer
+
+    
+
+    kensakuSu = 0
+
+    For l = 1 To Maxl
+
+        If Touseki.Cells(l, 3) = Namae Then
+
+            kensakuSu = kensakuSu + 1
+
+            If kensakuSu > 1 Then
+
+                MsgBox ("リストの中に、同名で２件以上のデータがあります。不要なデータを削除して下さい。")
+
+                Exit For
+
+            End If
+
+            Kensaku = l
+
+        End If
+
+    Next
+
+End Function
+
+Private Sub ListBox1_Click()
+
+    ListIdx = ListBox1.ListIndex
+
+    Namae = ListBox1.List(ListIdx)
+
+    l = Kensaku(ByVal Namae)
+
+                   
+
+    Touseki.Cells(l, 1).Activate
+
+End Sub
+
+ 
+
