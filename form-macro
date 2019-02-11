@@ -1,0 +1,80 @@
+Dim Maxl As Long
+Dim Retsu As Long
+Dim Touseki As Object
+
+
+Private Sub ComboBox1_Change()
+With ComboBox1
+        If .ListIndex < 0 Then
+            Retsu = 1
+        Else
+              
+            Retsu = .ListIndex + 1
+        End If
+        
+    End With
+End Sub
+Private Sub UserForm_Initialize()
+    Set Touseki = Worksheets("ワークシート検索")
+    'Touseki.Activate
+    Maxl = Touseki.UsedRange.Rows.Count
+    Retsu = 1
+    'ListIdx = 0
+    'ChangeSwitch = False
+    
+    'Call Member
+    '透析条件テンプ作成
+    'OptionButton1.Value = True
+    With ComboBox1
+        .AddItem "A(1列目)"
+        .AddItem "B(2列目)"
+        .AddItem "C(3列目)"
+        .AddItem "D(4列目)"
+        .AddItem "E(5列目)"
+        .AddItem "F(6列目)"
+        .AddItem "G(7列目)"
+        .AddItem "H(8列目)"
+        .AddItem "I(9列目)"
+
+    End With
+End Sub
+Private Sub CommandButton1_Click()
+    Dim Namae As String
+    Dim MeNamae As Object
+    
+    Namae = TextBox1.Text
+    Set MeNamae = KensakuForm
+    Call 検索(Namae, MeNamae, Retsu)
+
+End Sub
+Private Sub CommandButton2_Click()
+    End
+End Sub
+Public Function Kensaku(ByVal Namae As String, Retsu As Long)
+
+    Dim kensakuSu As Long
+    
+    kensakuSu = 0
+    For l = 1 To Maxl
+        If Touseki.Cells(l, Retsu) = Namae Then
+            kensakuSu = kensakuSu + 1
+            If kensakuSu > 1 Then
+                MsgBox ("リストの中に、同名で２件以上のデータがあります。不要なデータを削除して下さい。")
+                Touseki.Cells(kensakuSu, 1).Activate
+                Exit For
+            End If
+            Kensaku = l
+        End If
+    Next
+End Function
+Private Sub ListBox1_Click()
+    'If ChangeSwitch = True Then
+    '    保存忘れ防止装置
+    'End If
+    ListIdx = ListBox1.ListIndex
+    Namae = ListBox1.List(ListIdx)
+    l = Kensaku(ByVal Namae, Retsu)
+                   
+    'Call 個別へ表示(ByVal l)
+    Touseki.Cells(l, 1).Activate
+End Sub
